@@ -13,6 +13,7 @@
     "aws-sdk": "^2.1.5",
     "confidence": "^1.0.0",
     "lodash": "^2.4.1",
-    "protobuf": "^0.11.0"
+    "protobuf": "^0.11.0",
+    "ax.schemas": "git+https://e02bec817e76485c83a639d74cd824bd72e05488:x-oauth-basic@github.com/brandingbrand/ax.schemas"
   }
 }

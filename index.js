@@ -12,11 +12,21 @@ var eventSchema = new Schema(fs.readFileSync('./models/desc/eventContainer.desc'
 // The "BufTest" message.
 var EventContainer = eventSchema['com.nicktate.EventContainer'];
 
-var pageview = {
+var transaction = {
   type: 'TRANSACTION',
   transaction: {
-    url: 'my url',
-    total: 123
+    orderNumber: 'order 123',
+    total: 10.10
+  }
+};
+
+var pageview = {
+  type: 'PAGEVIEW',
+  email: 'test@example.com',
+  timestamp: 1522458478197,
+  pageview: {
+    url: 'http://www.ae.com/product/123',
+    referrer: 'http://www.google.com/my/search#cool?why=now'
   }
 };
 
@@ -25,11 +35,19 @@ console.log(typeof proto);
 console.log('proto.length:', proto.length);
 console.log('serialised:', proto);
 
+
+fs.writeFileSync('./test.txt', proto.toString('base64') + '\n');
+return;
+
+proto = EventContainer.serialize(transaction);
+fs.writeFileSync('./test.txt', proto);
+
 var outOb = EventContainer.parse(proto);
 console.log('unserialised:', JSON.stringify(outOb));
 
 //async.waterfall([putRecord, retrieveRecord], function(error, results) {
-async.waterfall([putRecord], function(error, results) {
+//async.waterfall([putRecord], function(error, results) {
+async.waterfall([], function(error, results) {
   if(error) {
     return console.error(error);
   }
