@@ -7,30 +7,45 @@ var async = require('async');
 var _ = require('lodash');
 
 // "schema" contains all message types defined in buftest.proto|desc.
-var eventSchema = new Schema(fs.readFileSync('./models/desc/eventContainer.desc'));
+var eventSchema = new Schema(fs.readFileSync('./node_modules/ax.schemas/gen/desc/event_container.desc'));
 
 // The "BufTest" message.
-var EventContainer = eventSchema['com.nicktate.EventContainer'];
+var EventContainer = eventSchema['com.bb.EventProto'];
 
 var transaction = {
   type: 'TRANSACTION',
   transaction: {
     orderNumber: 'order 123',
-    total: 10.10
+    summary: {
+      total: 10.10,
+      promos: [
+        {
+          "description": "bogo bb",
+          "id": "bb22",
+          "value": 1000000
+        }
+      ]
+    },
+    buckets: [
+      {
+        products: [
+          {
+            "title": "product 1",
+            "id": "123",
+            "quantity": 2,
+            "price": {
+              "unitCost": 4000000,
+              "totalCost": 8000000,
+              "currency": "USD"
+            }
+          }
+        ]
+      }
+    ]
   }
 };
 
-var pageview = {
-  type: 'PAGEVIEW',
-  email: 'test@example.com',
-  timestamp: 1522458478197,
-  pageview: {
-    url: 'http://www.ae.com/product/123',
-    referrer: 'http://www.google.com/my/search#cool?why=now'
-  }
-};
-
-var proto = EventContainer.serialize(pageview);
+var proto = EventContainer.serialize(transaction);
 console.log(typeof proto);
 console.log('proto.length:', proto.length);
 console.log('serialised:', proto);
